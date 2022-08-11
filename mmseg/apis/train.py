@@ -183,6 +183,16 @@ def train_segmentor(model,
             hook = build_from_cfg(hook_cfg, HOOKS)
             runner.register_hook(hook, priority=priority)
 
+    # # tensorboard trace
+    # trace_config = dict(type='tb_trace', dir_name=cfg.work_dir)
+    # profiler_config = dict(
+    #     by_epoch=False,
+    #     schedule=dict(wait=1, warmup=1, active=3, repeat=2),
+    #     profile_iters=20,
+    #     profile_memory=True,
+    #     on_trace_ready=trace_config)
+    # runner.register_profiler_hook(profiler_config)
+
     if cfg.resume_from is None and cfg.get('auto_resume'):
         resume_from = find_latest_checkpoint(cfg.work_dir)
         if resume_from is not None:
