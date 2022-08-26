@@ -349,11 +349,15 @@ class CustomDataset(Dataset):
             self.label_map = {}
             for i, c in enumerate(self.CLASSES):
                 if c not in class_names:
-                    self.label_map[i] = -1
+                    self.label_map[i] = len(class_names)
                 else:
                     self.label_map[i] = class_names.index(c)
 
         palette = self.get_palette_for_custom_classes(class_names, palette)
+        if len(class_names) == len(palette) - 1:
+            class_names.append('background')
+        pp(class_names)
+        pp(palette)
 
         return class_names, palette
 
@@ -364,8 +368,11 @@ class CustomDataset(Dataset):
             palette = []
             for old_id, new_id in sorted(
                     self.label_map.items(), key=lambda x: x[1]):
-                if new_id != -1:
+                if new_id != len(class_names):
                     palette.append(self.PALETTE[old_id])
+                else:
+                    palette.append([0, 0, 0])
+                    break
             palette = type(self.PALETTE)(palette)
 
         elif palette is None:

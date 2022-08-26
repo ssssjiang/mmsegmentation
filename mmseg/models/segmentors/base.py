@@ -9,6 +9,17 @@ import torch
 import torch.distributed as dist
 from mmcv.runner import BaseModule, auto_fp16
 
+import torchsnooper
+import snoop
+from snoop import pp
+from snoop.configuration import len_shape_watch, dtype_watch
+
+torchsnooper.register_snoop(verbose=True)
+snoop.install(color=True, columns=['time', 'function'],
+              watch_extras=[len_shape_watch, dtype_watch])
+
+
+
 
 class BaseSegmentor(BaseModule, metaclass=ABCMeta):
     """Base class for segmentors."""
@@ -264,6 +275,8 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
             else:
                 palette = self.PALETTE
         palette = np.array(palette)
+        pp(palette)
+        pp(self.CLASSES)
         assert palette.shape[0] == len(self.CLASSES)
         assert palette.shape[1] == 3
         assert len(palette.shape) == 2
