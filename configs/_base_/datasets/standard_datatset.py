@@ -42,7 +42,7 @@ data = dict(
         ann_dir='ann/train/',
         classes=['road', 'sidewalk', 'vegetation', 'terrain'],
         palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='mg/train/small_train_w.txt',
+        split='img/train/small_train_w.txt',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
@@ -51,7 +51,7 @@ data = dict(
         ann_dir='ann/val/',
         classes=['road', 'sidewalk', 'vegetation', 'terrain'],
         palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='mg/val/small_val_w.txt',
+        split='img/val/small_val_w.txt',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
@@ -60,7 +60,7 @@ data = dict(
         ann_dir='ann/val/',
         classes=['road', 'sidewalk', 'vegetation', 'terrain'],
         palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='mg/val/small_val_w.txt',
+        split='img/val/small_val_w.txt',
         pipeline=test_pipeline))
 
 custom_imports = dict(imports=['mmseg.datasets.standard_dataset'],

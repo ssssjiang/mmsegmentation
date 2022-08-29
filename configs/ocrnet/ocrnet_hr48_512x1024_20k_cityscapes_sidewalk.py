@@ -42,14 +42,3 @@ model = dict(
             loss_decode=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0))
     ])
-
-
-# data = dict(
-#     samples_per_gpu=2,
-#     workers_per_gpu=2,
-#     train=dict(
-#         split='img/train/cityscapes/small_train1.txt'),
-#     val=dict(
-#         split='img/val/cityscapes/small_val1.txt'),
-#     test=dict(
-#         split='img/val/cityscapes/small_val1.txt'))

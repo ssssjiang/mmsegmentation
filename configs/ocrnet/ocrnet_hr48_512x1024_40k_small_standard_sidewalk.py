@@ -1,7 +1,8 @@
 _base_ = [
-    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_dataset.py'
-    '../_base_/default_runtime.py', '../_base_/schedules/schedule_40k.py'
+    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_datatset.py',
+    '../_base_/customize_runtime.py', '../_base_/schedules/schedule_custom.py'
 ]
+
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     pretrained='open-mmlab://msra/hrnetv2_w48',

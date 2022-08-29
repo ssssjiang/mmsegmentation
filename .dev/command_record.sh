@@ -21,7 +21,7 @@ python tools/test.py configs/ocrnet/ocrnet_hr48_512x1024_20k_cityscapes_sidewalk
   work_dirs/ocrnet_hr48_512x1024_40k_cityscapes_sidewalk/latest.pth \
   --out work_dirs/ocrnet_hr48_512x1024_40k_cityscapes_sidewalk/results.pkl \
   --show-dir work_dirs/ocrnet_hr48_512x1024_40k_cityscapes_sidewalk/show \
-  --eval cityscapes --opacity 1 --gpu-id 6
+  --eval mIoU --opacity 1 --gpu-id 6
 
 # multiple GPUs test.
 ./tools/dist_test.sh configs/bisenetv2/bisenetv2_fcn_4x8_1024x1024_160k_cityscapes.py \
