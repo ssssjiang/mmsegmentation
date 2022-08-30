@@ -1,8 +1,7 @@
 _base_ = [
-    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/cityscapes.py',
+    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_datatset.py',
     '../_base_/customize_runtime.py', '../_base_/schedules/schedule_custom.py'
 ]
-
 
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
@@ -42,17 +41,3 @@ model = dict(
             loss_decode=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0))
     ])
-
-data = dict(
-    train=dict(
-        classes=['road', 'sidewalk', 'vegetation', 'terrain'],
-        palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]]),
-    val=dict(
-        classes=['road', 'sidewalk', 'vegetation', 'terrain'],
-        palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]]),
-    test=dict(
-        img_dir='img/val/',
-        ann_dir='ann/val/',
-        classes=['road', 'sidewalk', 'vegetation', 'terrain'],
-        palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='img/val/small_val_w.txt'))

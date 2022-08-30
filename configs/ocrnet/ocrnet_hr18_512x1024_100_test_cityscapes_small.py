@@ -5,11 +5,15 @@ _base_ = [
 
 
 data = dict(
-    samples_per_gpu=3,
-    workers_per_gpu=3,
     train=dict(
+        classes=['road', 'sidewalk', 'vegetation', 'terrain'],
+        palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
         split='img/train/cityscapes/small_train1.txt'),
     val=dict(
+        classes=['road', 'sidewalk', 'vegetation', 'terrain'],
+        palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
         split='img/val/cityscapes/small_val1.txt'),
     test=dict(
+        classes=['road', 'sidewalk', 'vegetation', 'terrain'],
+        palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
         split='img/val/cityscapes/small_val1.txt'))

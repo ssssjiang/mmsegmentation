@@ -3,8 +3,8 @@ dataset_type = 'StandardDataset'
 data_root = 'data/custom_datasets'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (512, 1024) # h,w
-img_scale = (1920,1080) # w,h
+crop_size = (512, 1024)  # h,w
+img_scale = (1920, 1080)  # w,h
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
@@ -42,7 +42,6 @@ data = dict(
         ann_dir='ann/train/',
         classes=['road', 'sidewalk', 'vegetation', 'terrain'],
         palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='img/train/small_train_w.txt',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
@@ -51,7 +50,6 @@ data = dict(
         ann_dir='ann/val/',
         classes=['road', 'sidewalk', 'vegetation', 'terrain'],
         palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='img/val/small_val_w.txt',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
@@ -60,7 +58,6 @@ data = dict(
         ann_dir='ann/val/',
         classes=['road', 'sidewalk', 'vegetation', 'terrain'],
         palette=[[128, 64, 128], [244, 35, 232], [107, 142, 35], [152, 251, 152]],
-        split='img/val/small_val_w.txt',
         pipeline=test_pipeline))
 
 custom_imports = dict(imports=['mmseg.datasets.standard_dataset'],

@@ -41,3 +41,11 @@ model = dict(
             loss_decode=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0))
     ])
+
+data = dict(
+    train=dict(
+        split='img/train/small_train_w.txt'),
+    val=dict(
+        split='img/val/small_val_w.txt'),
+    test=dict(
+        split='img/val/small_val_w.txt'))

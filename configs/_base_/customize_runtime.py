@@ -18,7 +18,8 @@ log_config = dict(
              },
              log_checkpoint=True,
              log_checkpoint_metadata=True,
-             num_eval_images=0)
+             num_eval_images=0,
+             start_iterations=0)
     ])
 # yapf:enable
 dist_params = dict(backend='nccl')
