@@ -48,7 +48,7 @@ def stat_error_labels(dataset, cfg, args):
 
         if not args.overwrite:
             err_stat_info_file = \
-                Path(args.seg_show_dir).parent / 'err_stat_test' / \
+                Path(args.seg_show_dir).parent / 'err_stat' / \
                 single_img_info_filename.with_suffix(".json")
 
             if os.path.exists(err_stat_info_file):
@@ -124,7 +124,7 @@ def save_err_stat_info(dataset, err_stat_by_class, err_stat_by_all, cfg, args):
             Path(dataset.img_infos[idx]['filename']).parent / \
             Path(dataset.img_infos[idx]['filename']).stem
         err_stat_info_file = os.path.join(
-            Path(args.seg_show_dir).parent / 'err_stat_test' / \
+            Path(args.seg_show_dir).parent / 'err_stat' / \
             err_stat_info_filename.with_suffix(".json"))
 
         if not args.overwrite and os.path.exists(err_stat_info_file):

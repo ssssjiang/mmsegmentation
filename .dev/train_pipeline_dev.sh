@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-CFG=configs/ocrnet/ocrnet_hr48_512x1024_40k_standard_sidewalk_aug.py
-WORK_DIR=work_dirs/ocrnet_hr48_512x1024_40k_standard_sidewalk_aug/
+CFG=configs/ocrnet/ocrnet_hr48_512x1024_40k_standard_sidewalk.py
+WORK_DIR=work_dirs/ocrnet_hr48_512x1024_40k_standard_sidewalk/
 
 # Train
 CUDA_VISIBLE_DEVICES=0,1,2,3,4 ./tools/dist_train.sh "${CFG}"  \
@@ -28,3 +28,8 @@ python tools/confusion_matrix.py "${CFG}" \
   "${LATEST_EVAL}"/show_seg \
   "${LATEST_EVAL}"
 
+
+# filter eval results
+python tools/filter_img_by_labels.py "${CFG}" \
+  "${LATEST_EVAL}"/err_stat \
+  --filter_eval
