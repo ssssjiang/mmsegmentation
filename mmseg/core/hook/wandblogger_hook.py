@@ -89,6 +89,7 @@ class MMSegWandbHook(WandbLoggerHook):
                  log_checkpoint=False,
                  log_checkpoint_metadata=False,
                  num_eval_images=100,
+                 start_iterations=0,
                  **kwargs):
         super(MMSegWandbHook, self).__init__(init_kwargs, interval, **kwargs)
 
@@ -100,6 +101,7 @@ class MMSegWandbHook(WandbLoggerHook):
         self.ckpt_hook: CheckpointHook = None
         self.eval_hook: EvalHook = None
         self.test_fn = None
+        self.start_iterations = start_iterations
 
     @master_only
     def before_run(self, runner):
@@ -170,6 +172,9 @@ class MMSegWandbHook(WandbLoggerHook):
 
     @master_only
     def after_train_iter(self, runner):
+        if runner.iter < self.start_iterations:
+            return
+
         if self.get_mode(runner) == 'train':
             # An ugly patch. The iter-based eval hook will call the
             # `after_train_iter` method of all logger hooks before evaluation.

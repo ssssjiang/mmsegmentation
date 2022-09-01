@@ -30,11 +30,28 @@ def parse_args():
     parser.add_argument('--plot_stats', action="store_true")
     parser.add_argument('--save_all_stats', action="store_true")
     parser.add_argument('--save_single_stats', action="store_true")
-    parser.add_argument('--read_single_stats', action="store_true")
+    parser.add_argument('--read_label_stats', action="store_true")
     parser.add_argument('--overwrite', type=bool, default=False)
     parser.add_argument('--stat_mode', type=str, default='test')
     args = parser.parse_args()
     return args
+
+
+def read_stat(dataset, cfg, idx):
+    n = len(dataset.CLASSES)
+    single_img_info_filename = \
+        Path(dataset.img_infos[idx]['filename']).parent / \
+        Path(dataset.img_infos[idx]['filename']).stem
+    single_img_info_file = os.path.join(
+        cfg['data_root'], cfg['ann_dir'].replace('ann', 'stat_ann'),
+        single_img_info_filename.with_suffix(".json"))
+    assert os.path.exists(single_img_info_file)
+
+    single_img_info = mmcv.load(single_img_info_file)
+    single_stat = np.zeros(n)
+    for idx, label in enumerate(dataset.CLASSES):
+        single_stat[idx] = float(single_img_info[label])
+    return single_stat
 
 
 def stat_labels(dataset, cfg, args):
@@ -74,12 +91,12 @@ def stat_labels(dataset, cfg, args):
         single_stat = single_stat / (single_stat.sum() + 0.0001)
 
         single_label_stat.append(single_stat)
-        all_labels_stat += single_stat
+        # all_labels_stat += single_stat
 
         del gt_segm
         prog_bar.update()
 
-    all_labels_stat = all_labels_stat / len(dataset.img_infos)
+    all_labels_stat = np.mean(np.array(single_label_stat), axis=1)
     pp(all_labels_stat)
 
     # single_label_stat = np.array(single_label_stat)
@@ -106,22 +123,27 @@ def save_all_imgs_info(dataset, all_labels_stat, cfg):
     mmcv.dump(all_imgs_info, all_imgs_info_file, indent=4)
 
 
-def save_single_imgs_info(dataset, single_label_stat, cfg):
+def save_single_imgs_info(dataset, single_label_stat, cfg, args):
     prog_bar = mmcv.ProgressBar(len(single_label_stat))
 
     for idx, label_stat in enumerate(single_label_stat):
-        single_img_info = dict()
-        single_img_info['classes'] = cfg['classes']
-
-        for label_id, label in enumerate(dataset.CLASSES):
-            single_img_info[label] = float(label_stat[label_id])
-
         single_img_info_filename = \
             Path(dataset.img_infos[idx]['filename']).parent / \
             Path(dataset.img_infos[idx]['filename']).stem
         single_img_info_file = os.path.join(
             cfg['data_root'], cfg['ann_dir'].replace('ann', 'stat_ann'),
             single_img_info_filename.with_suffix(".json"))
+
+        if not args.overwrite and os.path.exists(single_img_info_file):
+            prog_bar.update()
+            continue
+
+        single_img_info = dict()
+        single_img_info['classes'] = cfg['classes']
+
+        for label_id, label in enumerate(dataset.CLASSES):
+            single_img_info[label] = float(label_stat[label_id])
+
         mmcv.dump(single_img_info, single_img_info_file, indent=4)
         prog_bar.update()
 
@@ -161,18 +183,7 @@ def read_stats(dataset, cfg):
     all_labels_stat = np.zeros(n, dtype=np.float64)
     single_label_stat = []
     for idx in range(len(dataset.img_infos)):
-        single_img_info_filename = \
-            Path(dataset.img_infos[idx]['filename']).parent / \
-            Path(dataset.img_infos[idx]['filename']).stem
-        single_img_info_file = os.path.join(
-            cfg['data_root'], cfg['ann_dir'].replace('ann', 'stat_ann'),
-            single_img_info_filename.with_suffix(".json"))
-
-        single_img_info = mmcv.load(single_img_info_file)
-        single_stat = np.zeros(n)
-        for idx, label in enumerate(dataset.CLASSES):
-            single_stat[idx] = float(single_img_info[label])
-
+        single_stat = read_stat(dataset, cfg, idx)
         single_label_stat.append(single_stat)
         all_labels_stat += single_stat
         prog_bar.update()
@@ -196,11 +207,13 @@ def main():
         cfg = cfg.data.test
     elif args.stat_mode == 'train':
         cfg = cfg.data.train
+    elif args.stat_mode == 'val':
+        cfg = cfg.data.val
     else:
         raise ValueError(f'Not support {args.stat_mode} mode.')
 
     dataset = build_dataset(cfg)
-    if args.read_single_stats:
+    if args.read_label_stats:
         all_labels_stat, single_label_stat = read_stats(dataset, cfg)
     else:
         all_labels_stat, single_label_stat = stat_labels(dataset, cfg, args)
@@ -209,7 +222,7 @@ def main():
         save_all_imgs_info(dataset, all_labels_stat, cfg)
 
     if args.save_single_stats:
-        save_single_imgs_info(dataset, single_label_stat, cfg)
+        save_single_imgs_info(dataset, single_label_stat, cfg, args)
 
     if args.plot_stats:
         plot_all_labels_stat(dataset, all_labels_stat, cfg)

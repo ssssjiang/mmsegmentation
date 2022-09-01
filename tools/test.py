@@ -48,6 +48,9 @@ def parse_args():
     parser.add_argument(
         '--show-dir', help='directory where painted images will be saved')
     parser.add_argument(
+        '--show-seg-dir', help='directory where seg images will be saved'
+    )
+    parser.add_argument(
         '--gpu-collect',
         action='store_true',
         help='whether to use gpu to collect results.')
@@ -118,10 +121,10 @@ def parse_args():
 def main():
     args = parse_args()
     assert args.out or args.eval or args.format_only or args.show \
-        or args.show_dir, \
+        or args.show_dir or args.show_seg_dir \
         ('Please specify at least one operation (save/eval/format/show the '
          'results / save the results) with the argument "--out", "--eval"'
-         ', "--format-only", "--show" or "--show-dir"')
+         ', "--format-only", "--show" or "--show-dir" or "--show-seg-dir"')
 
     if args.eval and args.format_only:
         raise ValueError('--eval and --format_only cannot be both specified')
@@ -275,6 +278,7 @@ def main():
             data_loader,
             args.show,
             args.show_dir,
+            args.show_seg_dir,
             False,
             args.opacity,
             pre_eval=args.eval is not None and not eval_on_format_results,
@@ -295,7 +299,6 @@ def main():
             pre_eval=args.eval is not None and not eval_on_format_results,
             format_only=args.format_only or eval_on_format_results,
             format_args=eval_kwargs)
-
     rank, _ = get_dist_info()
     if rank == 0:
         if args.out:

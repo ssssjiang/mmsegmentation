@@ -46,6 +46,4 @@ data = dict(
     train=dict(
         split='img/train/small_train_w.txt'),
     val=dict(
-        split='img/val/small_val_w.txt'),
-    test=dict(
         split='img/val/small_val_w.txt'))

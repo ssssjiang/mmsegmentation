@@ -7,7 +7,7 @@
 #         # dict(type='PaviLoggerHook') # for internal services
 #     ])
 log_config = dict(
-    interval=100,
+    interval=1000,
     hooks=[
         # dict(type='TextLoggerHook', by_epoch=False),
         # dict(type='TensorboardLoggerHook', by_epoch=False),

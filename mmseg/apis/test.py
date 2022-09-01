@@ -35,6 +35,7 @@ def single_gpu_test(model,
                     data_loader,
                     show=False,
                     out_dir=None,
+                    seg_out_dir=None,
                     efficient_test=False,
                     opacity=0.5,
                     pre_eval=False,
@@ -116,6 +117,18 @@ def single_gpu_test(model,
                     out_file=out_file,
                     opacity=opacity)
 
+        if seg_out_dir:
+            img_metas = data['img_metas'][0].data[0]
+
+            for img_meta in img_metas:
+                if seg_out_dir:
+                    out_file = osp.join(seg_out_dir, img_meta['ori_filename'])
+                else:
+                    out_file = None
+
+                seg = result[0]
+                mmcv.imwrite(seg, out_file)
+
         if efficient_test:
             result = [np2tmp(_, tmpdir='.efficient_test') for _ in result]
 
@@ -127,8 +140,9 @@ def single_gpu_test(model,
             # only samples_per_gpu=1 valid now
             result = dataset.pre_eval(result, indices=batch_indices)
             results.extend(result)
-        else:
-            results.extend(result)
+        # else:
+        #     result = [res.astype(np.uint8) for res in result]
+        #     results.extend(result)
 
         batch_size = len(result)
         for _ in range(batch_size):
@@ -217,8 +231,11 @@ def multi_gpu_test(model,
             # TODO: adapt samples_per_gpu > 1.
             # only samples_per_gpu=1 valid now
             result = dataset.pre_eval(result, indices=batch_indices)
+            results.extend(result)
+        # else:
+        #     result = [res.astype(np.uint8) for res in result]
+        #     results.extend(result)
 
-        results.extend(result)
 
         if rank == 0:
             batch_size = len(result) * world_size
