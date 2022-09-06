@@ -4,8 +4,8 @@ CFG=configs/ocrnet/ocrnet_hr48_512x1024_40k_standard_sidewalk.py
 WORK_DIR=work_dirs/ocrnet_hr48_512x1024_40k_standard_sidewalk/
 
 # Train
-CUDA_VISIBLE_DEVICES=0,1,2,3,4 ./tools/dist_train.sh "${CFG}"  \
-  5 --work-dir "${WORK_DIR}" --deterministic
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5 ./tools/dist_train.sh "${CFG}"  \
+  6 --work-dir "${WORK_DIR}" --deterministic
 
 mkdir ${WORK_DIR}/latest_eval
 LATEST_EVAL=${WORK_DIR}/latest_eval

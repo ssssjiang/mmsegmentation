@@ -1,5 +1,3 @@
-#!/bin/bash
-
 CONFIG=$1
 GPUS=$2
 NNODES=${NNODES:-1}

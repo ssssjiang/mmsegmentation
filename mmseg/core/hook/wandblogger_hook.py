@@ -9,6 +9,13 @@ from mmcv.runner.hooks.checkpoint import CheckpointHook
 from mmcv.runner.hooks.logger.wandb import WandbLoggerHook
 
 from mmseg.core import DistEvalHook, EvalHook
+import torchsnooper
+import snoop
+from snoop.configuration import len_shape_watch, dtype_watch
+
+torchsnooper.register_snoop(verbose=True)
+snoop.install(color=True, columns=['time', 'function'],
+              watch_extras=[len_shape_watch, dtype_watch])
 
 
 @HOOKS.register_module()
