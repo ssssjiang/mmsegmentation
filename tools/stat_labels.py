@@ -139,10 +139,10 @@ def save_single_imgs_info(dataset, single_label_stat, cfg, args):
             continue
 
         single_img_info = dict()
-        single_img_info['classes'] = cfg['classes']
+        single_img_info['classes'] = dict()
 
         for label_id, label in enumerate(dataset.CLASSES):
-            single_img_info[label] = float(label_stat[label_id])
+            single_img_info['classes'][label] = float(label_stat[label_id])
 
         mmcv.dump(single_img_info, single_img_info_file, indent=4)
         prog_bar.update()

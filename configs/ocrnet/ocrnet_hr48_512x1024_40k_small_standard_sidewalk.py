@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_datatset.py',
+    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_dataset.py',
     '../_base_/customize_runtime.py', '../_base_/schedules/schedule_custom.py'
 ]
 

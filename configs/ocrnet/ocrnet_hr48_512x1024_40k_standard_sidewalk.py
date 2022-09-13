@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_datatset.py',
+    '../_base_/models/ocrnet_hr18.py', '../_base_/datasets/standard_dataset.py',
     '../_base_/customize_runtime.py', '../_base_/schedules/schedule_custom.py'
 ]
 
@@ -40,4 +40,14 @@ model = dict(
             align_corners=False,
             loss_decode=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0))
-    ])
+    ],
+    test_cfg=dict(mode='slide', crop_size=(512, 1024), stride=(384, 768)))
+
+optimizer = dict(type='SGD', lr=0.005)
+
+# learning policy
+lr_config = dict(min_lr=5e-5)
+
+data = dict(
+    test=dict(
+        split='img/val/filtered_imgs_night.txt'))

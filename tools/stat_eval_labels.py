@@ -24,7 +24,7 @@ np.set_printoptions(suppress=True)
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Generate confusion matrix from segmentation results')
+        description='Statsic classes from segmentation results')
     parser.add_argument('config', help='test config file path')
     parser.add_argument(
         'seg_show_dir', help='prediction path')
